@@ -40,7 +40,8 @@ public class ProductRestController {
         if (productRepo.containsKey(id)) {
             return new ResponseEntity<>(productRepo.get(id), HttpStatus.OK);
         }
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        //return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
