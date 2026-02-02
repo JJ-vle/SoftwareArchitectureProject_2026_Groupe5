@@ -1,13 +1,33 @@
 package demo.model;
 
 import java.time.Instant;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "tokens")
 public class AuthToken {
 
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    @Column(name = "token_value")
     private String value;          // token
+
+    @Column(name = "expiration")
     private Instant expiration;    // date d'expiration
+
+    @OneToOne(mappedBy = "token")
     private User user;             // utilisateur authentifié
 
+    // constructeurs
+    public AuthToken() {}
+
+    public AuthToken(String value, Instant expiration, User user) {
+        this.value = value;
+        this.expiration = expiration;
+        this.user = user;
+    }
+
+    // getters/setters
     public String getValue() {
         return value;
     }
