@@ -20,8 +20,8 @@ import demo.model.User;
 public class AuthRestController {
 
     // stockage temporaire utilisateurs et tokens
-    private static Map<String, User> userRepo = new HashMap<>();
-    private static Map<String, AuthToken> tokenRepo = new HashMap<>();
+    protected static Map<String, User> userRepo = new HashMap<>();
+    protected static Map<String, AuthToken> tokenRepo = new HashMap<>();
 
     // donnees de base pour test
     static {
