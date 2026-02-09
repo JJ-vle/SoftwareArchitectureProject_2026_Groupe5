@@ -14,9 +14,6 @@ public class User {
     @Column(name = "identifier")
     private String identifier;   // email / numéro étudiant
 
-    @Column(name = "password")
-    private String password;     // credential (simplifié)
-
     @ManyToMany
     @JoinTable(
         name = "user_auth",                                     // table d’association
@@ -31,12 +28,11 @@ public class User {
     // constructeurs
     public User() {}
 
-    public User(String identifier, String password) {
+    public User(String identifier) {
         this.identifier = identifier;
-        this.password = password;
     }
 
-    // gettests/setters
+    // getters/setters
     public String getUid() {
         return uid;
     }
@@ -51,14 +47,6 @@ public class User {
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-    
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public Set<Authority> getAuthorities() {
