@@ -2,6 +2,7 @@ package demo.controller;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import demo.model.AuthToken;
 import demo.model.Credential;
 import demo.model.User;
+import demo.service.AuthService;
 import demo.store.InMemoryStore;
 import demo.util.HashUtil;
 
@@ -23,11 +25,12 @@ import demo.util.HashUtil;
 @RequestMapping("/auth")
 public class AuthRestController {
 
-    private final InMemoryStore store;
+    private final AuthService authService;
 
-    public AuthRestController(InMemoryStore store) {
-        this.store = store;
+    public AuthRestController(AuthService authService) {
+        this.authService = authService;
     }
+
 
     // LOGIN
     /**
@@ -38,56 +41,43 @@ public class AuthRestController {
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<AuthToken> login(@RequestBody Map<String, String> credentials) {
-
-        String identifier = credentials.get("identifier");
-        String password = credentials.get("password");
-
-        // recup utilisateur depuis repo
-        User user = store.getUserRepo().get(identifier);
-        Credential cred = store.getCredentialRepo().get(identifier);
-
-        // verif connexion
-        if (user == null || cred == null || !cred.isActive() || !cred.getSecretHash().equals(HashUtil.hash(password))) {
+    
+        try {
+            AuthToken token = authService.login(
+                credentials.get("identifier"),
+                credentials.get("password")
+            );
+            return ResponseEntity.ok(token);
+    
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
-        // cree token
-        AuthToken token = new AuthToken();
-        token.setValue(UUID.randomUUID().toString());
-        token.setExpiration(Instant.now().plus(1, ChronoUnit.HOURS)); //1h
-        token.setUser(user);
-
-        // sauvegarde et renvoie token
-        store.getTokenRepo().put(token.getValue(), token);
-        return new ResponseEntity<>(token, HttpStatus.OK);
-    }
+    }    
 
     // LOGOUT
     @RequestMapping(value = "/logout/{token}", method = RequestMethod.DELETE)
     public ResponseEntity<Object> logout(@PathVariable String token) {
-        store.getTokenRepo().remove(token);
-        return new ResponseEntity<>("Logged out successfully", HttpStatus.OK);
+        authService.logout(token);
+        return ResponseEntity.ok("Logged out successfully");
     }
-
+    
     // LIST USERS (debug)
     @RequestMapping(value = "/users", method = RequestMethod.GET)
-    public ResponseEntity<Object> getUsers() {
-        return new ResponseEntity<>(store.getUserRepo().values(), HttpStatus.OK);
-    }
+    public ResponseEntity<List<User>> getUsers() {
+        return ResponseEntity.ok(authService.getAllUsers());
+    }    
 
     // VALIDATE TOKEN
     @RequestMapping(value = "/validate/{token}", method = RequestMethod.GET)
     public ResponseEntity<Object> validateToken(@PathVariable String token) {
-        AuthToken t = store.getTokenRepo().get(token);
-        if (t == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    
+        boolean valid = authService.validate(token);
+    
+        if (!valid) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        Instant exp = t.getExpiration();
-        if (exp != null && exp.isBefore(Instant.now())) {
-            store.getTokenRepo().remove(token);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token expired");
-        }
-        return ResponseEntity.ok().body("Token valid");
+        return ResponseEntity.ok("Token valid");
     }
+    
 
 }
