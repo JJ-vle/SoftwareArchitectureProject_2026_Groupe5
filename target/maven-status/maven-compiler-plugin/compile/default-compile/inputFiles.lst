@@ -12,6 +12,7 @@ D:\0_Master\S2\Intro Architecture\PROJET\src\main\java\demo\repository\Authority
 D:\0_Master\S2\Intro Architecture\PROJET\src\main\java\demo\repository\AuthTokenRepository.java
 D:\0_Master\S2\Intro Architecture\PROJET\src\main\java\demo\repository\CredentialRepository.java
 D:\0_Master\S2\Intro Architecture\PROJET\src\main\java\demo\repository\UserRepository.java
+D:\0_Master\S2\Intro Architecture\PROJET\src\main\java\demo\service\AdminService.java
 D:\0_Master\S2\Intro Architecture\PROJET\src\main\java\demo\service\AuthService.java
 D:\0_Master\S2\Intro Architecture\PROJET\src\main\java\demo\store\InMemoryStore.java
 D:\0_Master\S2\Intro Architecture\PROJET\src\main\java\demo\util\HashUtil.java
