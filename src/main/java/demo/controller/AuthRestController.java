@@ -78,6 +78,26 @@ public class AuthRestController {
         }
         return ResponseEntity.ok("Token valid");
     }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ResponseEntity<Object> register(@RequestBody Map<String, String> body) {
+
+        try {
+            authService.register(
+                body.get("email"),
+                body.get("password")
+            );
+
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
     
 
 }

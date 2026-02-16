@@ -24,6 +24,8 @@ public class User {
     @Column(name = "identifier")
     private String identifier;   // email / numéro étudiant
 
+    private boolean verified = false;
+
     @ManyToMany
     @JoinTable(
         name = "user_auth",                                     // table d’association
@@ -60,7 +62,6 @@ public class User {
     public String getUid() {
         return uid;
     }
-
     public void setUid(String uid) {
         this.uid = uid;
     }
@@ -68,7 +69,6 @@ public class User {
     public String getIdentifier() {
         return identifier;
     }
-
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
     }
@@ -76,7 +76,6 @@ public class User {
     public Set<Authority> getAuthorities() {
         return authorities;
     }
-
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
     }
@@ -84,8 +83,14 @@ public class User {
     public AuthToken getToken() {
         return token;
     }
-
     public void setToken(AuthToken token) {
         this.token = token;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
+    public boolean isVerified() {
+        return verified;
     }
 }
