@@ -1,10 +1,7 @@
 package demo.controller;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import demo.model.AuthToken;
-import demo.model.Credential;
 import demo.model.User;
 import demo.service.AuthService;
-import demo.store.InMemoryStore;
-import demo.util.HashUtil;
 
 @RestController
 @RequestMapping("/auth")

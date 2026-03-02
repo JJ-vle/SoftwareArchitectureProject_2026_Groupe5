@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
+import demo.event.EmailVerifiedEvent;
+import demo.event.UserRegisteredEvent;
 import demo.model.AuthToken;
 import demo.model.Credential;
 import demo.repository.AuthTokenRepository;
@@ -15,8 +18,6 @@ import demo.repository.CredentialRepository;
 import demo.repository.UserRepository;
 import demo.model.User;
 import demo.model.VerificationToken;
-import demo.model.Credential;
-import demo.model.AuthToken;
 import demo.util.HashUtil;
 import jakarta.transaction.Transactional;
 
@@ -30,16 +31,20 @@ public class AuthService {
     private final AuthTokenRepository tokenRepository;
     private final VerificationTokenRepository verificationTokenRepository;
 
+    private final RabbitTemplate rabbitTemplate;
+
     public AuthService(
         UserRepository userRepository,
         CredentialRepository credentialRepository,
         AuthTokenRepository tokenRepository,
-        VerificationTokenRepository verificationTokenRepository
+        VerificationTokenRepository verificationTokenRepository,
+        RabbitTemplate rabbitTemplate
     ) {
         this.userRepository = userRepository;
         this.credentialRepository = credentialRepository;
         this.tokenRepository = tokenRepository;
         this.verificationTokenRepository = verificationTokenRepository;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     public AuthToken login(String identifier, String password) {
@@ -102,43 +107,75 @@ public class AuthService {
         credentialRepository.save(cred);
 
         // verification token
+        String tokenId = UUID.randomUUID().toString();
         String tokenClear = UUID.randomUUID().toString();
 
         VerificationToken token = new VerificationToken();
+        token.setTokenId(tokenId);
         token.setUser(user);
         token.setTokenHash(HashUtil.hash(tokenClear));
         token.setExpiresAt(Instant.now().plus(15, ChronoUnit.MINUTES));
         verificationTokenRepository.save(token);
 
         // PUBLISH EVENT RABBITMQ
+        UserRegisteredEvent event = new UserRegisteredEvent(
+                UUID.randomUUID().toString(),
+                Instant.now(),
+                user.getUid(),
+                user.getIdentifier(),
+                tokenId,
+                tokenClear
+        );
+
+        rabbitTemplate.convertAndSend(
+                "auth.events",
+                "auth.user-registered",
+                event
+        );
+
     }
+        
+    @Transactional
+    public void verify(String tokenId, String clearToken) {
 
-    
-    
-@Transactional
-public void verify(String tokenId, String clearToken) {
+        VerificationToken token = verificationTokenRepository
+                .findById(tokenId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid token"));
 
-    // Charger le token par tokenId
-    VerificationToken token = verificationTokenRepository
-            .findByTokenHash(HashUtil.hash(tokenId))
-            .orElseThrow(() -> new IllegalArgumentException("Invalid token"));
+        // expiration
+        if (token.getExpiresAt().isBefore(Instant.now())) {
+            verificationTokenRepository.delete(token);
+            throw new IllegalArgumentException("Token expired");
+        }
 
-    // Vérifier expiration
-    if (token.getExpiresAt().isBefore(Instant.now())) {
+        // comparer le secret
+        if (!token.getTokenHash().equals(HashUtil.hash(clearToken))) {
+            throw new IllegalArgumentException("Invalid token");
+        }
+
+        User user = token.getUser();
+
+        // idempotence
+        if (!user.isVerified()) {
+            user.setVerified(true);
+        }
+
+        // one-shot
         verificationTokenRepository.delete(token);
-        throw new IllegalArgumentException("Token expired");
+
+        // publish EmailVerified event
+        EmailVerifiedEvent event = new EmailVerifiedEvent(
+                UUID.randomUUID().toString(),
+                Instant.now(),
+                user.getUid()
+        );
+
+        rabbitTemplate.convertAndSend(
+                "auth.events",
+                "auth.email-verified",
+                event
+        );
     }
-
-    // Charger le user
-    User user = userRepository.findById(token.getUser().getUid())
-            .orElseThrow(() -> new IllegalStateException("User not found"));
-
-    // supprimer le token
-    verificationTokenRepository.delete(token);
-
-
-    // PUBLISH EMAILVERIFIED
-}
 
 
     public List<User> getAllUsers() {
