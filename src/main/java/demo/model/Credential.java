@@ -1,5 +1,7 @@
 package demo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -10,6 +12,8 @@ public class Credential {
     private String id; // simple String id (UUID)
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
 
     private String type; // ex: PASSWORD, API_KEY

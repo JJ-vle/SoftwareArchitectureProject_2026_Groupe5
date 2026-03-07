@@ -1,6 +1,10 @@
 package demo.model;
 
 import java.util.Set;
+import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -8,11 +12,19 @@ import jakarta.persistence.*;
 public class User {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    //@GeneratedValue(strategy=GenerationType.AUTO) //@GeneratedValue ne marche pas pour les Strings
     private String uid;          // identifiant interne
-
+    @PrePersist
+    public void prePersist() {
+        if (uid == null) {
+            uid = UUID.randomUUID().toString();
+        }
+    }
+        
     @Column(name = "identifier")
     private String identifier;   // email / numéro étudiant
+
+    private boolean verified = false;
 
     @ManyToMany
     @JoinTable(
@@ -20,10 +32,24 @@ public class User {
         joinColumns = @JoinColumn(name = "user_id"),            // clé étrangère vers User
         inverseJoinColumns = @JoinColumn(name = "authority_id") // clé étrangère vers Authority
     )
+    @JsonManagedReference
     private Set<Authority> authorities;
 
-    @OneToOne
+    @OneToOne(
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    @JoinColumn(name = "token_id")
+    @JsonManagedReference
     private AuthToken token;
+
+    @OneToMany(
+        mappedBy = "user",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    @JsonManagedReference
+    private Set<Credential> credentials;    
 
     // constructeurs
     public User() {}
@@ -36,7 +62,6 @@ public class User {
     public String getUid() {
         return uid;
     }
-
     public void setUid(String uid) {
         this.uid = uid;
     }
@@ -44,7 +69,6 @@ public class User {
     public String getIdentifier() {
         return identifier;
     }
-
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
     }
@@ -52,7 +76,6 @@ public class User {
     public Set<Authority> getAuthorities() {
         return authorities;
     }
-
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
     }
@@ -60,8 +83,14 @@ public class User {
     public AuthToken getToken() {
         return token;
     }
-
     public void setToken(AuthToken token) {
         this.token = token;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
+    public boolean isVerified() {
+        return verified;
     }
 }

@@ -1,6 +1,9 @@
 package demo.model;
 
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -11,6 +14,7 @@ public class Authority {
     private String name; // ROLE_USER, ROLE_ADMIN
 
     @ManyToMany(mappedBy = "authorities")
+    @JsonBackReference
     private Set<User> users;
 
     // constructeurs
