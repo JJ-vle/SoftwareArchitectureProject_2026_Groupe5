@@ -92,6 +92,16 @@ public class AuthRestController {
         }
     }
 
-    
-
+    // VERIFY EMAIL
+    @RequestMapping(value = "/verify", method = RequestMethod.GET)
+    public ResponseEntity<Object> verify(
+            @org.springframework.web.bind.annotation.RequestParam String tokenId,
+            @org.springframework.web.bind.annotation.RequestParam String token) {
+        try {
+            authService.verify(tokenId, token);
+            return ResponseEntity.ok("Email verified successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 }

@@ -5,19 +5,21 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.stereotype.Service;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
 
 import demo.event.EmailVerifiedEvent;
 import demo.event.UserRegisteredEvent;
 import demo.model.AuthToken;
 import demo.model.Credential;
-import demo.repository.AuthTokenRepository;
-import demo.repository.VerificationTokenRepository;
-import demo.repository.CredentialRepository;
-import demo.repository.UserRepository;
 import demo.model.User;
 import demo.model.VerificationToken;
+import demo.repository.AuthTokenRepository;
+import demo.repository.CredentialRepository;
+import demo.repository.UserRepository;
+import demo.repository.VerificationTokenRepository;
 import demo.util.HashUtil;
 import jakarta.transaction.Transactional;
 
@@ -31,13 +33,18 @@ public class AuthService {
     private final AuthTokenRepository tokenRepository;
     private final VerificationTokenRepository verificationTokenRepository;
 
+    @Nullable
     private final RabbitTemplate rabbitTemplate;
+
+    @Value("${app.rabbitmq.enabled:false}")
+    private boolean rabbitEnabled;
 
     public AuthService(
         UserRepository userRepository,
         CredentialRepository credentialRepository,
         AuthTokenRepository tokenRepository,
         VerificationTokenRepository verificationTokenRepository,
+        @org.springframework.beans.factory.annotation.Autowired(required = false)
         RabbitTemplate rabbitTemplate
     ) {
         this.userRepository = userRepository;
@@ -127,11 +134,13 @@ public class AuthService {
                 tokenClear
         );
 
-        rabbitTemplate.convertAndSend(
-                "auth.events",
-                "auth.user-registered",
-                event
-        );
+        if (rabbitEnabled && rabbitTemplate != null) {
+            rabbitTemplate.convertAndSend(
+                    "auth.events",
+                    "auth.user-registered",
+                    event
+            );
+        }
 
     }
         
@@ -170,11 +179,13 @@ public class AuthService {
                 user.getUid()
         );
 
-        rabbitTemplate.convertAndSend(
-                "auth.events",
-                "auth.email-verified",
-                event
-        );
+        if (rabbitEnabled && rabbitTemplate != null) {
+            rabbitTemplate.convertAndSend(
+                    "auth.events",
+                    "auth.email-verified",
+                    event
+            );
+        }
     }
 
 

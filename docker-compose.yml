@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+
+  # ---- RabbitMQ (broker de messages) ----
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"    # AMQP
+      - "15672:15672"  # interface web (guest/guest)
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  # ---- Mailhog (faux serveur SMTP pour tester les mails) ----
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    ports:
+      - "1025:1025"    # SMTP
+      - "8025:8025"    # interface web pour voir les mails
+
+  # ---- Nginx (reverse proxy + auth subrequest) ----
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - rabbitmq
