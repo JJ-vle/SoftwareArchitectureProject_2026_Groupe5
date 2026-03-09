@@ -1,5 +1,6 @@
 package demo.service;
 
+import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +53,33 @@ public class AdminService {
         }
     }
 
+    public List<User> getAllUsers(String authHeader){
+        AuthToken token = getToken(authHeader);
+        checkAdmin(token);
+
+        return userRepository.findAll();
+    }
+
+    public User getUser(String authHeader, String identifier){
+        AuthToken token = getToken(authHeader);
+        checkAdmin(token);
+
+        return userRepository.findByIdentifier(identifier)
+                .orElseThrow(() -> new IllegalArgumentException("user not found"));
+    }
+
+    public User updateUser(String authHeader, String identifier, String newIdentifier){
+        AuthToken token = getToken(authHeader);
+        checkAdmin(token);
+
+        User user = userRepository.findByIdentifier(identifier)
+                .orElseThrow(() -> new IllegalArgumentException("user not found"));
+
+        user.setIdentifier(newIdentifier);
+
+        return userRepository.save(user);
+    }
+
     public User createUser(String authHeader, String identifier) {
 
         AuthToken token = getToken(authHeader);
@@ -70,31 +98,6 @@ public class AdminService {
         user.setIdentifier(identifier);
 
         return userRepository.save(user);
-    }
-
-    public Credential addCredential(String authHeader,
-                                    String identifier,
-                                    String type,
-                                    String secret) {
-
-        AuthToken token = getToken(authHeader);
-        checkAdmin(token);
-
-        User user = userRepository.findByIdentifier(identifier)
-                .orElseThrow(() -> new IllegalArgumentException("user not found"));
-
-        if (secret == null || secret.isBlank()) {
-            throw new IllegalArgumentException("secret required");
-        }
-
-        Credential cred = new Credential();
-        cred.setId(UUID.randomUUID().toString());
-        cred.setUser(user);
-        cred.setType(type == null ? "PASSWORD" : type);
-        cred.setSecretHash(HashUtil.hash(secret));
-        cred.setActive(true);
-
-        return credentialRepository.save(cred);
     }
 
     public void deleteUser(String authHeader, String identifier) {
@@ -122,4 +125,50 @@ public class AdminService {
 
         userRepository.delete(user);
     }
+
+    public Credential addCredential(String authHeader,
+                                    String identifier,
+                                    String type,
+                                    String secret) {
+
+        AuthToken token = getToken(authHeader);
+        checkAdmin(token);
+
+        User user = userRepository.findByIdentifier(identifier)
+                .orElseThrow(() -> new IllegalArgumentException("user not found"));
+
+        if (secret == null || secret.isBlank()) {
+            throw new IllegalArgumentException("secret required");
+        }
+
+        Credential cred = new Credential();
+        cred.setId(UUID.randomUUID().toString());
+        cred.setUser(user);
+        cred.setType(type == null ? "PASSWORD" : type);
+        cred.setSecretHash(HashUtil.hash(secret));
+        cred.setActive(true);
+
+        return credentialRepository.save(cred);
+    }
+
+    public List<Credential> getCredentials(String authHeader, String identifier){
+        AuthToken token = getToken(authHeader);
+        checkAdmin(token);
+
+        User user = userRepository.findByIdentifier(identifier)
+                .orElseThrow(() -> new IllegalArgumentException("user not found"));
+
+        return credentialRepository.findByUser(user);
+    }
+
+    public void deleteCredential(String authHeader, String id){
+        AuthToken token = getToken(authHeader);
+        checkAdmin(token);
+
+        Credential cred = credentialRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("credential not found"));
+
+        credentialRepository.delete(cred);
+    }
+
 }
