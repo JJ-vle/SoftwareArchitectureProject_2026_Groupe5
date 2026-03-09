@@ -21,16 +21,52 @@ public class RabbitConfig {
         return new TopicExchange("auth.events");
     }
 
+    // ===== DLX (Dead Letter Exchange) et DLQ =====
+    @Bean
+    public DirectExchange authEventsDlExchange() {
+        return new DirectExchange("auth.events.dlx", true, false);
+    }
+
+    @Bean
+    public Queue registrationMailDlq() {
+        return new Queue("mail.registration.dlq", true);
+    }
+
+    @Bean
+    public Queue verifiedMailDlq() {
+        return new Queue("mail.verified.dlq", true);
+    }
+
+    @Bean
+    public Binding bindRegistrationDlq(Queue registrationMailDlq, DirectExchange authEventsDlExchange) {
+        return BindingBuilder.bind(registrationMailDlq).to(authEventsDlExchange).with("mail.registration");
+    }
+
+    @Bean
+    public Binding bindVerifiedDlq(Queue verifiedMailDlq, DirectExchange authEventsDlExchange) {
+        return BindingBuilder.bind(verifiedMailDlq).to(authEventsDlExchange).with("mail.verified");
+    }
+
+    // ===== Queues principales avec DLX =====
     // Queue pour les emails d'inscription
     @Bean
     public Queue registrationMailQueue() {
-        return new Queue("mail.registration", true);
+        return QueueBuilder.durable("mail.registration")
+                .deadLetterExchange("auth.events.dlx")
+                .deadLetterRoutingKey("mail.registration")
+                .ttl(3600000) // TTL 1 heure (messages expirent après 1h)
+                //.ttl(1000) // TTL 1s
+                .build();
     }
 
     // Queue pour les emails de vérification confirmée
     @Bean
     public Queue verifiedMailQueue() {
-        return new Queue("mail.verified", true);
+        return QueueBuilder.durable("mail.verified")
+                .deadLetterExchange("auth.events.dlx")
+                .deadLetterRoutingKey("mail.verified")
+                .ttl(3600000) // TTL 1 heure
+                .build();
     }
 
     // Binding : événements "auth.user-registered" -> queue mail.registration
