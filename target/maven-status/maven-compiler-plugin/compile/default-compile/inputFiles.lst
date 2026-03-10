@@ -1,24 +1,25 @@
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\config\RabbitConfig.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\controller\AdminController.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\controller\AuthRestController.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\controller\ProductRestController.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\DemoApp.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\event\EmailVerifiedEvent.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\event\UserRegisteredEvent.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\init\DataInitializer.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\listener\MailListener.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\model\Authority.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\model\AuthToken.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\model\Credential.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\model\Product.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\model\User.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\model\VerificationToken.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\repository\AuthorityRepository.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\repository\AuthTokenRepository.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\repository\CredentialRepository.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\repository\UserRepository.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\repository\VerificationTokenRepository.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\service\AdminService.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\service\AuthService.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\store\InMemoryStore.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\util\HashUtil.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\config\RabbitConfig.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\controller\AdminController.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\controller\AuthRestController.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\controller\ProductRestController.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\DemoApp.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\event\EmailVerifiedEvent.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\event\UserRegisteredEvent.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\exception\GlobalExceptionHandler.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\init\DataInitializer.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\listener\MailListener.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\model\Authority.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\model\AuthToken.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\model\Credential.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\model\Product.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\model\User.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\model\VerificationToken.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\repository\AuthorityRepository.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\repository\AuthTokenRepository.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\repository\CredentialRepository.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\repository\UserRepository.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\repository\VerificationTokenRepository.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\service\AdminService.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\service\AuthService.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\store\InMemoryStore.java
+C:\Users\bagia\Desktop\S2\Cours\Architecture\Projet\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\util\HashUtil.java

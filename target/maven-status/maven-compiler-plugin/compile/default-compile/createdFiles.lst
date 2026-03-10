@@ -12,6 +12,7 @@ demo\util\HashUtil.class
 demo\controller\AuthRestController.class
 demo\model\Product.class
 demo\controller\AdminController.class
+demo\exception\GlobalExceptionHandler.class
 demo\config\RabbitConfig.class
 demo\service\AdminService.class
 demo\store\InMemoryStore.class
