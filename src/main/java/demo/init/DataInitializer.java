@@ -37,31 +37,51 @@ public class DataInitializer {
     public void init() {
 
         if (userRepository.count() > 0) {
-            return; // évite les doublons au restart
+            return;
         }
 
-        // ===== ROLE_USER =====
-        Authority userRole = new Authority("ROLE_USER");
-        authorityRepository.save(userRole);
+        // ===== AUTHORITIES =====
 
-        User user = new User("student1");
-        user.setAuthorities(Set.of(userRole));
-        userRepository.save(user);
+        Authority roleUser = authorityRepository.save(new Authority("ROLE_USER"));
+        Authority roleAdmin = authorityRepository.save(new Authority("ROLE_ADMIN"));
 
-        Credential userCred = new Credential(
+        Authority serviceA = authorityRepository.save(new Authority("SERVICE_A"));
+        Authority serviceB = authorityRepository.save(new Authority("SERVICE_B"));
+
+        // ===== USER A (accès service A) =====
+
+        User user1 = new User("student1");
+        user1.setAuthorities(Set.of(roleUser, serviceA));
+        userRepository.save(user1);
+
+        Credential user1Cred = new Credential(
             UUID.randomUUID().toString(),
-            user,
+            user1,
             "PASSWORD",
             HashUtil.hash("password")
         );
-        credentialRepository.save(userCred);
 
-        // ===== ROLE_ADMIN =====
-        Authority adminRole = new Authority("ROLE_ADMIN");
-        authorityRepository.save(adminRole);
+        credentialRepository.save(user1Cred);
+
+        // ===== USER B (accès service B) =====
+
+        User user2 = new User("student2");
+        user2.setAuthorities(Set.of(roleUser, serviceB));
+        userRepository.save(user2);
+
+        Credential user2Cred = new Credential(
+            UUID.randomUUID().toString(),
+            user2,
+            "PASSWORD",
+            HashUtil.hash("password")
+        );
+
+        credentialRepository.save(user2Cred);
+
+        // ===== ADMIN (accès A + B + admin) =====
 
         User admin = new User("admin");
-        admin.setAuthorities(Set.of(adminRole));
+        admin.setAuthorities(Set.of(roleAdmin, serviceA, serviceB));
         userRepository.save(admin);
 
         Credential adminCred = new Credential(
@@ -70,6 +90,7 @@ public class DataInitializer {
             "PASSWORD",
             HashUtil.hash("adminpass")
         );
+
         credentialRepository.save(adminCred);
     }
 }

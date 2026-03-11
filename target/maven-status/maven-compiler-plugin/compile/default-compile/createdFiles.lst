@@ -4,7 +4,6 @@ demo\listener\MailListener.class
 demo\event\UserRegisteredEvent.class
 demo\model\Credential.class
 demo\model\VerificationToken.class
-demo\controller\ProductRestController.class
 demo\service\AuthService.class
 demo\event\EmailVerifiedEvent.class
 demo\repository\CredentialRepository.class
@@ -16,9 +15,11 @@ demo\config\RabbitConfig.class
 demo\service\AdminService.class
 demo\store\InMemoryStore.class
 demo\model\User.class
+demo\controller\ProductAController.class
 demo\repository\AuthTokenRepository.class
 demo\repository\AuthorityRepository.class
 demo\model\Authority.class
 demo\init\DataInitializer.class
+demo\controller\ProductBController.class
 demo\repository\UserRepository.class
 demo\DemoApp.class

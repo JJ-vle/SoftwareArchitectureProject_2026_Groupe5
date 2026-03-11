@@ -1,7 +1,8 @@
 D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\config\RabbitConfig.java
 D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\controller\AdminController.java
 D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\controller\AuthRestController.java
-D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\controller\ProductRestController.java
+D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\controller\ProductAController.java
+D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\controller\ProductBController.java
 D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\DemoApp.java
 D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\event\EmailVerifiedEvent.java
 D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\event\UserRegisteredEvent.java

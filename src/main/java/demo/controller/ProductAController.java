@@ -11,9 +11,14 @@ import org.springframework.web.bind.annotation.*;
 import demo.model.Product;
 
 @RestController
-@RequestMapping("/products")
-public class ProductRestController {
-    private static Map<String, Product> productRepo = new HashMap<>();
+@RequestMapping("/a")
+public class ProductAController {
+
+    @GetMapping("/products")
+    public String getProducts() { return "Products from A"; }
+
+
+    /*private static Map<String, Product> productRepo = new HashMap<>();
     static {
         Product honey = new Product();
         honey.setId("1");
@@ -26,7 +31,6 @@ public class ProductRestController {
         productRepo.put(almond.getId(), almond);
     }
 
-    
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Collection<Product>> getProduct(
             @RequestParam(value = "startWith", defaultValue = "") String prefix) {
@@ -62,5 +66,5 @@ public class ProductRestController {
     public ResponseEntity<Object> createProduct(@RequestBody Product product) {
         productRepo.put(product.getId(), product);
         return new ResponseEntity<>("Product is created successfully", HttpStatus.CREATED);
-    }
+    }*/
 }

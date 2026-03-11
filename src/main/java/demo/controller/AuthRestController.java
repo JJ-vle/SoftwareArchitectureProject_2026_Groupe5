@@ -5,8 +5,10 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,6 +64,7 @@ public class AuthRestController {
     }    
 
     // VALIDATE TOKEN
+    /*
     @RequestMapping(value = "/validate/{token}", method = RequestMethod.GET)
     public ResponseEntity<Object> validateToken(@PathVariable String token) {
     
@@ -71,6 +74,52 @@ public class AuthRestController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return ResponseEntity.ok("Token valid");
+    }*/
+
+    @GetMapping("/validate")
+    public ResponseEntity<Void> validate(
+            @RequestHeader(value="Authorization", required=false) String authHeader,
+            @RequestHeader(value="X-Target-Service", required=false) String targetService) {
+
+        // pas de token
+        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String tokenValue = authHeader.replace("Bearer ", "");
+
+        AuthToken token = authService.getToken(tokenValue);
+
+        if(token == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        User user = token.getUser();
+
+        // ADMIN = accès à tout
+        boolean isAdmin =
+            user.getAuthorities()
+                .stream()
+                .anyMatch(a -> a.getName().equals("ROLE_ADMIN"));
+
+        if(isAdmin){
+            return ResponseEntity.ok().build();
+        }
+
+        // vérification accès service
+        if(targetService != null){
+
+            boolean allowed =
+                user.getAuthorities()
+                    .stream()
+                    .anyMatch(a -> a.getName().equals("SERVICE_" + targetService));
+
+            if(!allowed){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        }
+
+        return ResponseEntity.ok().build();
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)

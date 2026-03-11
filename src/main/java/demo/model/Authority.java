@@ -11,7 +11,7 @@ import jakarta.persistence.*;
 public class Authority {
 
     @Id
-    private String name; // ROLE_USER, ROLE_ADMIN
+    private String name; // ROLE_USER, ROLE_ADMIN, SERVICE_A, SERVICE_B 
 
     @ManyToMany(mappedBy = "authorities")
     @JsonBackReference

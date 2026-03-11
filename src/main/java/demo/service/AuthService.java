@@ -191,5 +191,23 @@ public class AuthService {
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
-    }    
+    }
+
+    public AuthToken getToken(String tokenValue) {
+
+        AuthToken token = tokenRepository
+            .findById(tokenValue)
+            .orElse(null);
+
+        if (token == null) {
+            return null;
+        }
+
+        if (token.getExpiration().isBefore(Instant.now())) {
+            tokenRepository.delete(token);
+            return null;
+        }
+
+        return token;
+    }
 }
