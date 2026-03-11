@@ -62,7 +62,8 @@ public class AuthService {
             .findByUserAndTypeAndActiveTrue(user, "PASSWORD")
             .orElseThrow(() -> new IllegalArgumentException("Invalid credentials"));
 
-        if (!cred.getSecretHash().equals(HashUtil.hash(password))) {
+        // BCrypt : on compare le mot de passe clair avec le hash stocké
+        if (!HashUtil.matches(password, cred.getSecretHash())) {
             throw new IllegalArgumentException("Invalid credentials");
         }
 
@@ -157,8 +158,8 @@ public class AuthService {
             throw new IllegalArgumentException("Token expired");
         }
 
-        // comparer le secret
-        if (!token.getTokenHash().equals(HashUtil.hash(clearToken))) {
+        // BCrypt : on compare le token clair avec le hash stocké
+        if (!HashUtil.matches(clearToken, token.getTokenHash())) {
             throw new IllegalArgumentException("Invalid token");
         }
 

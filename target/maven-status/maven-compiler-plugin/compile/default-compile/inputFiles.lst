@@ -6,6 +6,7 @@ D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_
 D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\DemoApp.java
 D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\event\EmailVerifiedEvent.java
 D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\event\UserRegisteredEvent.java
+D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\exception\GlobalExceptionHandler.java
 D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\init\DataInitializer.java
 D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\listener\MailListener.java
 D:\0_Master\S2\Intro Architecture\REPOS_A_JOUR\SoftwareArchitectureProject_2026_Groupe5\src\main\java\demo\model\Authority.java

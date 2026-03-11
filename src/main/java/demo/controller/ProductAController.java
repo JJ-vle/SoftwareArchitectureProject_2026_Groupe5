@@ -15,10 +15,10 @@ import demo.model.Product;
 public class ProductAController {
 
     @GetMapping("/products")
-    public String getProducts() { return "Products from A"; }
+    public String getProductsTest() { return "Products from A"; }
 
 
-    /*private static Map<String, Product> productRepo = new HashMap<>();
+    private static Map<String, Product> productRepo = new HashMap<>();
     static {
         Product honey = new Product();
         honey.setId("1");
@@ -66,5 +66,5 @@ public class ProductAController {
     public ResponseEntity<Object> createProduct(@RequestBody Product product) {
         productRepo.put(product.getId(), product);
         return new ResponseEntity<>("Product is created successfully", HttpStatus.CREATED);
-    }*/
+    }
 }

@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductBController {
 
     @GetMapping("/products")
-    public String getProducts() { return "Products from B"; }
+    public String getProductsTest() { return "Products from B"; }
 }
