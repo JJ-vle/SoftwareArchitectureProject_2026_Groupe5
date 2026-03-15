@@ -20,13 +20,13 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    ///////////////// USERS //////////////////
+    ///////////////// USERS ////////////////// 
 
-    // CREATE USER
-    @PostMapping("/users")
-    public ResponseEntity<Object> createUser(
+    // CREATE USER 
+    @PostMapping("/users") 
+    public ResponseEntity<Object> createUser( 
             @RequestHeader(value = "Authorization", required = false) String auth,
-            @RequestBody Map<String, String> body) {
+            @RequestBody Map<String, String> body) { 
 
         try {
             User user = adminService.createUser(auth, body.get("identifier"));
