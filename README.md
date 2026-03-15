@@ -1,4 +1,4 @@
-# Mini API Spring Boot — Projet de démonstration
+# Mini API Spring Boot - Projet de démonstration
 
 ## Résumé du projet
 
@@ -80,7 +80,7 @@ Explications:
 
 ### 3) Commandes pour tester les endpoints
 
-#### PowerShell (via Nginx — port 80)
+#### PowerShell (via Nginx - port 80)
 
 Script de test:
 
@@ -144,7 +144,7 @@ Explication:
 - Utile pour tester le backend en isolation, sans la couche reverse proxy ni le controle d'acces de la gateway.
 - Le token retourne est identique et peut etre reutilise dans les appels suivants.
 
-#### Bash / curl (direct Spring Boot — port 8080)
+#### Bash / curl (direct Spring Boot - port 8080)
 
 **Authentification**
 - POST /auth/login
@@ -180,7 +180,7 @@ curl -i http://localhost:8080/auth/validate \
 curl -i -X DELETE http://localhost:8080/auth/logout/<TOKEN>
 ```
 
-**Administration** — necessite un token avec `ROLE_ADMIN`
+**Administration** - necessite un token avec `ROLE_ADMIN`
 
 - POST /admin/users
   - Description : crée un utilisateur (sans mot de passe).
@@ -238,8 +238,35 @@ curl http://localhost:8080/b/products
 
 ## Routes
 
-| Méthode | URL                  | Arguments                     | Retour                           |
-| ------- | -------------------- | ----------------------------- | -------------------------------- |
-| POST    | /auth/login          | JSON `{identifier, password}` | 200 AuthToken / 401 Unauthorized |
-| DELETE  | /auth/logout/{token} | Path `token`                  | 200 "Logged out successfully"    |
-| GET     | /auth/users          | –                             | 200 Liste des utilisateurs       |
+| Méthode | URL                                         | Arguments / Headers                                            | Retour / Description                                                                 |
+| ------- | ------------------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| POST    | /auth/login                                 | Body JSON `{ "identifier", "password" }`                   | 200 AuthToken (JSON) / 401 Unauthorized - Authentifie un utilisateur               |
+| DELETE  | /auth/logout/{token}                        | Path `token`                                                   | 200 "Logged out successfully" - Révoque le token                                 |
+| GET     | /auth/users                                 | -                                                              | 200 Liste des `User` (endpoint de debug)                                           |
+| POST    | /auth/register                              | Body JSON `{ "email", "password" }`                        | 201 Created / 409 Conflict / 400 Bad Request - Inscription + envoi email vérif.    |
+| GET     | /auth/verify                                | Query params `tokenId`, `token`                                | 200 "Email verified successfully" / 400 Bad Request - Vérification d'email       |
+| GET     | /auth/validate                              | Header `Authorization: Bearer <token>` (opt. `X-Target-Service`) | 200 / 401 / 403 - Validation utilisée par la gateway (Nginx); vérifie droits service |
+
+| Méthode | URL                                         | Arguments / Headers                                            | Retour / Description                                                                 |
+| ------- | ------------------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| POST    | /admin/users                                | Header `Authorization: Bearer <admin-token>`, Body `{identifier}` | 201 User / 403 Forbidden / 409 Conflict / 400 Bad Request - Crée un utilisateur    |
+| GET     | /admin/users                                | Header `Authorization`                                         | 200 Liste des utilisateurs - Endpoints d'administration                           |
+| GET     | /admin/users/{identifier}                   | Header `Authorization`                                         | 200 User - Récupère un utilisateur                                                 |
+| PUT     | /admin/users/{identifier}                   | Header `Authorization`, Body `{identifier}`                    | 200 Updated User - Modifie l'identifiant de l'utilisateur                         |
+| DELETE  | /admin/users/{identifier}                   | Header `Authorization`                                         | 200 / 403 / 404 - Supprime l'utilisateur et ses données                            |
+
+| Méthode | URL                                         | Arguments / Headers                                            | Retour / Description                                                                 |
+| ------- | ------------------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| POST    | /admin/users/{identifier}/credentials       | Header `Authorization`, Body `{ "type", "secret" }`        | 201 Credential / 403 / 400 - Ajoute un credential (ex: password)                  |
+| GET     | /admin/users/{identifier}/credentials       | Header `Authorization`                                         | 200 Liste des credentials                                                         |
+| DELETE  | /admin/credentials/{id}                     | Header `Authorization`                                         | 200 - Supprime le credential identifié                                             |
+
+| Méthode | URL                                         | Arguments / Headers                                            | Retour / Description                                                                 |
+| ------- | ------------------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| GET     | /a/products                                 | Header `Authorization` (via Nginx)                             | 200 "Products from A" - Service A (exposé derrière Nginx)                        |
+| GET     | /b/products                                 | Header `Authorization` (via Nginx)                             | 200 "Products from B" - Service B (exposé derrière Nginx)                        |
+
+Notes:
+- L'API est conçue pour fonctionner derrière Nginx. La gateway appelle `/auth/validate` en lui passant l'en-tête `X-Target-Service` (valeurs: `A` ou `B`) pour vérifier que le token possède l'autorité `SERVICE_A` ou `SERVICE_B`.
+- Les endpoints d'administration requièrent un token avec `ROLE_ADMIN`.
+- Les mots de passe sont gérés via l'entité `Credential` (hash BCrypt) ; les tokens opaques sont persistés dans `AuthToken`.

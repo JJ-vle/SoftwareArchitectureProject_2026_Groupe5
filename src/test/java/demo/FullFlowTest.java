@@ -17,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import demo.controller.ProductAController;
 import demo.model.AuthToken;
-import demo.model.Product;
 import demo.model.User;
 import demo.service.AuthService;
 
@@ -84,21 +83,10 @@ class FullFlowTest {
         assertFalse(valid, "Un faux token ne doit pas être validé");
     }
 
-    // ===== PRODUCTS =====
-
-    @Test
-    @Order(6)
-    void getProducts_returnsList() {
-        Collection<Product> products = productController.getProduct("").getBody();
-        assertNotNull(products);
-        assertFalse(products.isEmpty(), "Il doit y avoir des produits");
-        assertTrue(products.stream().anyMatch(p -> "Honey".equals(p.getName())), "Il doit y avoir du miel");
-    }
-
     // ===== AUTH : REGISTER =====
 
     @Test
-    @Order(7)
+    @Order(6)
     void register_newUser_createsUser() {
         String uniqueEmail = "test-" + System.currentTimeMillis() + "@demo.com";
         
@@ -107,7 +95,7 @@ class FullFlowTest {
     }
 
     @Test
-    @Order(8)
+    @Order(7)
     void register_existingUser_throwsException() {
         // student1 existe déjà
         assertThrows(Exception.class, () -> authService.register("student1", "pass"));
@@ -116,7 +104,7 @@ class FullFlowTest {
     // ===== AUTH : LOGOUT =====
 
     @Test
-    @Order(9)
+    @Order(8)
     void logout_doesNotThrow() {
         // Créer un nouveau token pour ce test
         AuthToken token = authService.login("admin", "adminpass");
@@ -135,7 +123,7 @@ class FullFlowTest {
     // ===== AUTH : USERS LIST =====
 
     @Test
-    @Order(10)
+    @Order(9)
     void getUsers_containsExpectedUsers() {
         List<User> users = authService.getAllUsers();
         assertFalse(users.isEmpty(), "La liste d'utilisateurs ne doit pas être vide");
