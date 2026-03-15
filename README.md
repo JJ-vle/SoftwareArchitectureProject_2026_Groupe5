@@ -29,8 +29,19 @@
 - `admin` : accès complet A + B + rôle `ROLE_ADMIN`, mot de passe `adminpass`.
 
 ## Launch
+Le projet peut maintenant être démarré entièrement via Docker Compose (l'application Spring Boot est construite et packagée dans une image Docker lors du `docker compose up --build`).
 
+Vous avez deux options pour lancer l'application : via Docker (recommandé) ou localement avec Maven.
+
+Docker (tout-en-un) — construit les images et démarre l'infra + l'application :
+
+```bash
+docker compose up --build
 ```
+
+Maven (développement local) — démarre uniquement l'application Spring Boot (exige que RabbitMQ/MailHog/Nginx soient démarrés séparément) :
+
+```bash
 mvn spring-boot:run
 ```
 
@@ -56,6 +67,7 @@ Explications:
   - MailHog (boite mail de test)
   - Nginx (reverse proxy)
 - `mvn -DskipTests spring-boot:run` compile et lance l'API Spring Boot sans executer les tests unitaires/integration.
+
 ### 2) Explication des 4 URLs qui servent au projet
 
 - `http://localhost:15672/#/`

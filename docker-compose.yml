@@ -2,6 +2,21 @@ version: "3.9"
 
 services:
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: demo-app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: "5672"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
   # ---- RabbitMQ (broker de messages) ----
   rabbitmq:
     image: rabbitmq:3-management
@@ -12,6 +27,12 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "status"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
 
   # ---- Mailhog (faux serveur SMTP pour tester les mails) ----
   mailhog:
