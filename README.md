@@ -1,5 +1,5 @@
 # Mini API Spring Boot - Projet de démonstration
-
+Réalisé par ALECU Luca GIACCHERO Baptiste et VIALE Jean Jacques
 ## Résumé du projet
 
 **Architecture générale**
